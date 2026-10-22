@@ -2094,7 +2094,7 @@ if st.session_state.page == "detail":
     from html import escape
 
     nearby_df = pd.read_excel(
-        "festival_nearby_attractions_complete.xlsx",
+        Path(__file__).resolve().parent / "festival_nearby_attractions_complete.xlsx",
         dtype={"contentid": str},
     )
     nearby_df = nearby_df[
