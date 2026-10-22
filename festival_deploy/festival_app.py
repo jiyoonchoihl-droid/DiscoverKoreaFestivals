@@ -2441,7 +2441,7 @@ if st.session_state.page == "detail":
     )
 
     if festival_key:
-        image_folder = Path("festival_backgrounds_split")
+        image_folder = Path(__file__).resolve().parent / "festival_backgrounds_split"
 
         sidebar_path = image_folder / f"{festival_key}_sidebar.png"
         main_path = image_folder / f"{festival_key}_main.png"
