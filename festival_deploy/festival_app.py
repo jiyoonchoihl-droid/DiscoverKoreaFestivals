@@ -1260,7 +1260,7 @@ FESTIVAL_STATIONS = {
     "강릉커피축제": ("서울", "강릉"),
     "수원화성문화제": ("서울", "수원"),
     "춘천마임축제": ("청량리", "춘천"),
-    "전주비빔밥축제": ("서울", "전주"),
+    "전주비빔밥축제": ("용산", "전주"),
 }
 
 
@@ -1583,7 +1583,7 @@ if st.session_state.page == "map":
         st.markdown(
             f"<div class='section-kicker'>{tr('PLAN YOUR JOURNEY', '기차 여행 계획하기')}</div>"
             f"<div class='section-title' style='font-size:32px;'>"
-            f"{tr('Find Your Train', '열차 시간표 찾기')}"f"{TRAIN_ICON_HTML}</div>",
+            f"{tr('How Long by Train?', '기차로 얼마나 걸릴까?')}"f"{TRAIN_ICON_HTML}</div>",
             unsafe_allow_html=True,
         )
         current_festival = st.session_state.selected_festival
@@ -1609,10 +1609,8 @@ if st.session_state.page == "map":
                     tr('Arrival station', '도착역'), list(STATION_IDS),
                     format_func=station_label, key='train_arrival',
                 )
-            train_date = st.date_input(
-                tr('Travel date', '여행 날짜'), value=date.today() + timedelta(days=1),
-                min_value=date.today(), key='train_travel_date',
-            )
+            # 메인 화면에서는 날짜를 입력받지 않고 내일을 조회 기준일로 사용
+            train_date = date.today() + timedelta(days=1)
             search_pressed = st.form_submit_button(
                 tr('SEARCH TRAINS ↗', '열차 검색하기 ↗'), use_container_width=True,
             )
@@ -1636,39 +1634,83 @@ if st.session_state.page == "map":
                         st.session_state.pop('train_search_result', None)
                         st.error(f"{tr('Train search failed', '열차 조회 실패')}: {exc}")
 
+
         result = st.session_state.get('train_search_result')
-        if result and result['route'] == (departure_station, arrival_station) and result['date'] == train_date.isoformat():
+
+        if (
+            result
+            and result['route'] == (departure_station, arrival_station)
+            and result['date'] == train_date.isoformat()
+        ):
             trains = result['trains']
-            st.markdown(f"**{tr('Train schedules', '열차 시간표')}** · {len(trains)} {tr('results', '개 결과')}")
+
             if not trains:
                 st.info(tr(
-                    'No direct trains were returned for this route and date. Try another station or check the booking site for transfers.',
-                    '해당 날짜와 구간의 직통 열차가 조회되지 않았어. 다른 역을 선택하거나 예매 사이트에서 환승 경로를 확인해 줘.',
+                    "No direct train information was returned for these stations. "
+                    "Try another Seoul departure station or check transfer routes.",
+                    "선택한 역 사이의 직통 열차 정보를 확인할 수 없어. "
+                    "다른 서울 출발역이나 환승 경로를 확인해 줘.",
                 ))
+
             else:
-                for train in trains[:10]:
-                    hours, minutes = divmod(train['duration'], 60)
-                    duration_text = (
-                        f"{hours}h {minutes}m" if st.session_state.language == 'EN'
-                        else f"{hours}시간 {minutes}분" if hours else f"{minutes}분"
-                    )
+                durations = sorted(
+                    int(train['duration'])
+                    for train in trains
+                    if train.get('duration') is not None
+                    and int(train['duration']) > 0
+                )
+
+                if durations:
+                    # 조회된 직통 열차 소요시간의 중앙값
+                    middle = len(durations) // 2
+
+                    if len(durations) % 2:
+                        typical_minutes = durations[middle]
+                    else:
+                        typical_minutes = round(
+                            (durations[middle - 1] + durations[middle]) / 2
+                        )
+
+                    hours, minutes = divmod(typical_minutes, 60)
+
+                    if st.session_state.language == 'EN':
+                        duration_text = (
+                            f"{hours}h {minutes}m"
+                            if hours else f"{minutes}m"
+                        )
+                        heading = "TYPICAL TRAIN JOURNEY"
+                        duration_display = f"About {duration_text}"
+                    else:
+                        duration_text = (
+                            f"{hours}시간 {minutes}분"
+                            if hours else f"{minutes}분"
+                        )
+                        heading = "대표 열차 소요시간"
+                        duration_display = f"약 {duration_text}"
+
                     with st.container(border=True):
-                        st.markdown(f"**{escape(train['train'])}** · {escape(train['number'])}")
-                        st.markdown(f"### {train['departure']} → {train['arrival']}")
-                        st.caption(f"{tr('Duration', '소요시간')}: {duration_text}  ·  {tr('API fare', 'API 제공 요금')}: {train['charge']}")
-                if len(trains) > 10:
-                    st.caption(tr(
-                        f'Showing the first 10 of {len(trains)} trains.',
-                        f'전체 {len(trains)}개 중 출발이 빠른 10개 열차를 표시해.',
+                        st.caption(heading)
+                        st.markdown(f"## 🚆 {duration_display}")
+
+                        st.markdown(
+                            f"**{station_label(departure_station)}"
+                            f" → {station_label(arrival_station)}**"
+                        )
+
+                        st.caption(tr(
+                            f"Based on {len(durations)} direct trains "
+                            f"returned for the selected date. "
+                            "Actual journey times may vary.",
+                            f"선택한 날짜에 조회된 직통 열차 "
+                            f"{len(durations)}편의 소요시간을 기준으로 계산했어. "
+                            "실제 소요시간은 열차에 따라 달라질 수 있어.",
+                        ))
+
+                else:
+                    st.info(tr(
+                        "Train duration information is unavailable.",
+                        "열차 소요시간 정보를 확인할 수 없어.",
                     ))
-            st.caption(tr(
-                'Schedules and fares are API information, not live seat availability. Confirm on the official booking site.',
-                '시간표와 요금은 API 제공 정보이며 실시간 잔여 좌석은 아니야. 공식 예매 사이트에서 확인해 줘.',
-            ))
-            st.link_button(
-                tr('BOOK ON KORAIL ↗', '코레일에서 예매하기 ↗'),
-                'https://www.letskorail.com/', use_container_width=True,
-            )
 
     with select_col:
         localized_markdown(
@@ -1803,7 +1845,7 @@ FESTIVAL_STATIONS = {
     "강릉커피축제": ("서울", "강릉"),
     "수원화성문화제": ("서울", "수원"),
     "춘천마임축제": ("청량리", "춘천"),
-    "전주비빔밥축제": ("서울", "전주"),
+    "전주비빔밥축제": ("용산", "전주"),
 }
 
 @st.dialog("🚆 Plan your train journey")
@@ -1909,8 +1951,8 @@ def train_search_dialog():
         if not trains:
             st.info(
                 tr(
-                    "No direct trains found. Try another route or date.",
-                    "직통 열차가 조회되지 않았어. 다른 구간이나 날짜를 선택해 줘.",
+                    "No direct train information was returned for these stations. Try another Seoul departure station or check transfer routes. This does not necessarily mean trains are unavailable.",
+                    "선택한 역 사이의 직통 열차 정보를 확인할 수 없어. 다른 서울 출발역이나 환승 경로를 확인해 줘. 열차가 운행하지 않는다는 뜻은 아니야.",
                 )
             )
 
