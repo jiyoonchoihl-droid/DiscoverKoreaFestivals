@@ -670,6 +670,36 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # TOPLINE_COLOR_END
 
+# SELECTBOX_TEXT_VISIBILITY_FIX
+st.markdown("""
+<style>
+/* 선택창 배경과 기본 글자색 */
+div[data-baseweb="select"] > div {
+    background-color: #FFFFFF !important;
+    color: #45382F !important;
+}
+
+/* 처음 표시되는 기본값과 변경한 선택값 */
+div[data-baseweb="select"] [data-testid="stMarkdownContainer"],
+div[data-baseweb="select"] [data-testid="stMarkdownContainer"] p,
+div[data-baseweb="select"] [data-testid="stMarkdownContainer"] span,
+div[data-baseweb="select"] [role="combobox"],
+div[data-baseweb="select"] [role="combobox"] *,
+div[data-baseweb="select"] input {
+    color: #45382F !important;
+    -webkit-text-fill-color: #45382F !important;
+}
+
+/* 선택창의 화살표 */
+div[data-baseweb="select"] svg {
+    fill: #45382F !important;
+    color: #45382F !important;
+}
+</style>
+""", unsafe_allow_html=True)
+# SELECTBOX_TEXT_VISIBILITY_FIX_END
+
+
 # 3. 축제 기본 데이터
 # ------------------------------------------------------------
 # 엑셀 파일에 일부 축제가 없더라도 네 개 축제를 모두 표시합니다.
