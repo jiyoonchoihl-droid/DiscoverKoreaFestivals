@@ -340,7 +340,7 @@ st.markdown(
 }
 
 .stApp:has(.st-key-home_hero) header[data-testid="stHeader"] {
-    display: none !important;
+    background: transparent !important;
 }
 
 .stApp:has(.st-key-home_hero) .block-container {
