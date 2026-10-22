@@ -2571,3 +2571,18 @@ if st.session_state.page == "detail":
         """).strip()),
         unsafe_allow_html=True,
     )
+
+
+# SIDEBAR RESTORE TEST
+st.markdown("""
+<style>
+@media (min-width: 901px) {
+    [data-testid="stSidebar"] {
+        min-width: 225px !important;
+        max-width: 225px !important;
+        width: 225px !important;
+        transform: translateX(0) !important;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
