@@ -670,40 +670,54 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # TOPLINE_COLOR_END
 
-# TRAIN_FORM_FINAL_FIX_V3
+# TRAIN_FORM_VISIBLE_FIX_V4
 st.markdown("""
 <style>
-/* 01페이지 열차 검색 폼의 안내 글씨 */
-.st-key-train_search_form [data-testid="stWidgetLabel"],
-.st-key-train_search_form [data-testid="stWidgetLabel"] * {
+/* 01페이지: 출발역 선택창이 있는 열차 검색 폼만 선택 */
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stWidgetLabel"],
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stWidgetLabel"] * {
     color: #45382F !important;
     -webkit-text-fill-color: #45382F !important;
     opacity: 1 !important;
+    visibility: visible !important;
 }
 
-/* SEARCH TRAINS: 흰색 배경 + 진한 갈색 글씨 */
-.st-key-train_search_form [data-testid="stFormSubmitButton"] button {
+/* SEARCH TRAINS 버튼: 클릭 전부터 흰색 배경 */
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stFormSubmitButton"] button {
+    background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     border: 1px solid #D8DBD1 !important;
     color: #45382F !important;
+    opacity: 1 !important;
 }
 
 /* 버튼 내부 글씨 */
-.st-key-train_search_form [data-testid="stFormSubmitButton"] button *,
-.st-key-train_search_form [data-testid="stFormSubmitButton"] button p {
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stFormSubmitButton"] button * {
     color: #45382F !important;
     -webkit-text-fill-color: #45382F !important;
     opacity: 1 !important;
 }
 
-/* 마우스를 올렸을 때 */
-.st-key-train_search_form [data-testid="stFormSubmitButton"] button:hover {
-    background-color: #F7F6F2 !important;
-    border-color: #B9A795 !important;
+/* 마우스를 올리거나 클릭했을 때도 글씨 유지 */
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stFormSubmitButton"] button:hover,
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stFormSubmitButton"] button:focus,
+div[data-testid="stForm"]:has(.st-key-train_departure)
+[data-testid="stFormSubmitButton"] button:active {
+    background: #F7F6F2 !important;
+    color: #45382F !important;
 }
 </style>
 """, unsafe_allow_html=True)
-# TRAIN_FORM_FINAL_FIX_V3_END
+# TRAIN_FORM_VISIBLE_FIX_V4_END
+
+
+
 
 
 
