@@ -670,73 +670,46 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # TOPLINE_COLOR_END
 
-# TRAIN_TEXT_ONLY_FIX_V2
+# TRAIN_FORM_FINAL_FIX_V3
 st.markdown("""
 <style>
-/* 출발역·도착역 안내 글씨 */
-[data-testid="stForm"] [data-testid="stWidgetLabel"],
-[data-testid="stForm"] [data-testid="stWidgetLabel"] p,
-[data-testid="stForm"] [data-testid="stWidgetLabel"] span {
+/* 01페이지 열차 검색 폼의 안내 글씨 */
+.st-key-train_search_form [data-testid="stWidgetLabel"],
+.st-key-train_search_form [data-testid="stWidgetLabel"] * {
     color: #45382F !important;
     -webkit-text-fill-color: #45382F !important;
     opacity: 1 !important;
 }
 
-/* SEARCH TRAINS 버튼: 기존 배경색 유지, 글씨만 흰색 */
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button,
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button p,
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button span {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+/* SEARCH TRAINS: 흰색 배경 + 진한 갈색 글씨 */
+.st-key-train_search_form [data-testid="stFormSubmitButton"] button {
+    background-color: #FFFFFF !important;
+    border: 1px solid #D8DBD1 !important;
+    color: #45382F !important;
 }
-</style>
-""", unsafe_allow_html=True)
-# TRAIN_TEXT_ONLY_FIX_V2_END
 
-
-# MAP_TRAIN_FORM_STYLE_FIX_V1
-st.markdown("""
-<style>
-/* 01페이지: 열차 검색 영역의 안내 글씨 */
-.st-key-train_departure label,
-.st-key-train_arrival label,
-.st-key-train_departure [data-testid="stWidgetLabel"] *,
-.st-key-train_arrival [data-testid="stWidgetLabel"] * {
+/* 버튼 내부 글씨 */
+.st-key-train_search_form [data-testid="stFormSubmitButton"] button *,
+.st-key-train_search_form [data-testid="stFormSubmitButton"] button p {
     color: #45382F !important;
     -webkit-text-fill-color: #45382F !important;
     opacity: 1 !important;
-}
-
-/* 열차 검색 폼의 모든 입력 항목 제목 */
-[data-testid="stForm"] [data-testid="stWidgetLabel"] p {
-    color: #45382F !important;
-    -webkit-text-fill-color: #45382F !important;
-    opacity: 1 !important;
-}
-
-/* 검색 버튼: 밝은 배경과 진한 글씨 */
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
-    background-color: #F1EBE3 !important;
-    border: 1px solid #B9A795 !important;
-    color: #45382F !important;
-    border-radius: 2px !important;
-}
-
-/* 버튼 안의 글씨까지 명확하게 지정 */
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button *,
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button p {
-    color: #45382F !important;
-    -webkit-text-fill-color: #45382F !important;
 }
 
 /* 마우스를 올렸을 때 */
-[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
-    background-color: #E6DBCF !important;
-    border-color: #9A806A !important;
+.st-key-train_search_form [data-testid="stFormSubmitButton"] button:hover {
+    background-color: #F7F6F2 !important;
+    border-color: #B9A795 !important;
 }
 </style>
 """, unsafe_allow_html=True)
-# MAP_TRAIN_FORM_STYLE_FIX_V1_END
+# TRAIN_FORM_FINAL_FIX_V3_END
+
+
+
+
+
+
 
 
 # SELECTBOX_TEXT_VISIBILITY_FIX
