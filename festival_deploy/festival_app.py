@@ -670,6 +670,30 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # TOPLINE_COLOR_END
 
+# TRAIN_TEXT_ONLY_FIX_V2
+st.markdown("""
+<style>
+/* 출발역·도착역 안내 글씨 */
+[data-testid="stForm"] [data-testid="stWidgetLabel"],
+[data-testid="stForm"] [data-testid="stWidgetLabel"] p,
+[data-testid="stForm"] [data-testid="stWidgetLabel"] span {
+    color: #45382F !important;
+    -webkit-text-fill-color: #45382F !important;
+    opacity: 1 !important;
+}
+
+/* SEARCH TRAINS 버튼: 기존 배경색 유지, 글씨만 흰색 */
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button,
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button p,
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button span {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+</style>
+""", unsafe_allow_html=True)
+# TRAIN_TEXT_ONLY_FIX_V2_END
+
+
 # MAP_TRAIN_FORM_STYLE_FIX_V1
 st.markdown("""
 <style>
